@@ -4,14 +4,16 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const User = require('../models/user');
 
+const usersRouter = require('./routes/users');
+const coursesRouter = require('./routes/courses');
 const app = express();
 
 // Mongoose
 // connect to database
-mongoose.connect('mongodb://localhost:27017/course-api',
-  { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/course-api', { 
+  useNewUrlParser: true 
+});
 var db = mongoose.connection;
 
 // connection error
@@ -30,19 +32,12 @@ app.set('port', process.env.PORT || 5000);
 // morgan gives us http request logging
 app.use(morgan('dev'));
 
-// TODO add additional routes here
-
-// GET /api/users - return all users TEST
-app.get('/api/users', function (req, res, next) {
-  User.find({})
-    .exec(function (err, user) { //eksevere når klar
-        if (err) return next(err); // sende til express error if error
-        res.json(user); // responder med alle questions som json
-  });
-});
+// routes
+app.use('/api/courses', coursesRouter);
+app.use('/api/users', usersRouter);
 
 // send a friendly greeting for the root route
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({
     message: 'Welcome to the Course Review API'
   });

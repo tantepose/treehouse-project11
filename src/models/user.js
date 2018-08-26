@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 
+// User model:
 // _id (ObjectId, auto-generated)
 // fullName (String, required)
 // emailAddress (String, required, must be unique and in correct format)
