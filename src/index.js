@@ -3,8 +3,26 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
+const User = require('../models/user');
 
 const app = express();
+
+// Mongoose
+// connect to database
+mongoose.connect('mongodb://localhost:27017/course-api',
+  { useNewUrlParser: true });
+var db = mongoose.connection;
+
+// connection error
+db.on('error', function (err) {
+    console.log('Error connecting to database:', err);
+});
+
+// connection sucsess
+db.once('open', function () {
+    console.log('The database is live!');
+});
 
 // set our port
 app.set('port', process.env.PORT || 5000);
@@ -13,6 +31,15 @@ app.set('port', process.env.PORT || 5000);
 app.use(morgan('dev'));
 
 // TODO add additional routes here
+
+// GET /api/users - return all users TEST
+app.get('/api/users', function (req, res, next) {
+  User.find({})
+    .exec(function (err, user) { //eksevere når klar
+        if (err) return next(err); // sende til express error if error
+        res.json(user); // responder med alle questions som json
+  });
+});
 
 // send a friendly greeting for the root route
 app.get('/', (req, res) => {
