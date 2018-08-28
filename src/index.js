@@ -36,6 +36,10 @@ app.use(morgan('dev'));
 app.use('/api/courses', coursesRouter);
 app.use('/api/users', usersRouter);
 
+// Update any POST and PUT routes to return Mongoose validation errors.
+// Use the next function in each route to pass any Mongoose validation errors to Express’s global error handler
+// Send the Mongoose validation error with a400 status code to the user
+
 // send a friendly greeting for the root route
 app.get('/api', (req, res) => {
   res.json({

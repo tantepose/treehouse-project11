@@ -1,46 +1,39 @@
 var mongoose = require('mongoose');
 
-// Course model:
-// _id (ObjectId, auto-generated)
-// user (_id from the users collection)
-// title (String, required)
-// description (String, required)
-// estimatedTime (String)
-// materialsNeeded (String)
-// steps (Array of objects that include 
-    // stepNumber (Number), 
-    // title (String, required) 
-    // description (String, required) properties)
-// reviews (Array of ObjectId values, _id values from the reviews collection)
+var ReviewSchema = require('./review');
 
 var CourseSchema = new mongoose.Schema({
     user: {
-        type: Date,
+        type: mongoose.Schema.Types.ObjectId // _id from the users collection
     },
     title: {
         type: String,
+        required: true
     },
     description: {
         type: Number,
+        required: true
     },
     estimatedTime: {
-        type: String,
+        type: String
     },
     materialsNeeded: {
-        type: Number,
+        type: String
     },
-    steps: {
+    steps: [{
             stepNumber: {
                 type: Number
             }, title: {
-                type: String
+                type: String,
+                required: true
             }, description: {
-                type: String
+                type: String,
+                required: true
             }
-    },
-    reviews: {
-        type: Number,
-    }
+    }],
+    reviews: [{ 
+        type: mongoose.Schema.Types.ObjectId // _id values from the reviews collection
+    }]
 });
 
 var Course = mongoose.model('Course', CourseSchema);
