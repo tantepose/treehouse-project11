@@ -11,7 +11,7 @@ var CourseSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: Number,
+        type: String,
         required: true
     },
     estimatedTime: {
@@ -20,7 +20,8 @@ var CourseSchema = new mongoose.Schema({
     materialsNeeded: {
         type: String
     },
-    steps: [{
+    steps: [
+        {
             stepNumber: {
                 type: Number
             }, title: {
@@ -30,7 +31,8 @@ var CourseSchema = new mongoose.Schema({
                 type: String,
                 required: true
             }
-    }],
+        }
+    ],
     reviews: [{ 
         type: mongoose.Schema.Types.ObjectId // _id values from the reviews collection
     }]

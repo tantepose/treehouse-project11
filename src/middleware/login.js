@@ -11,15 +11,34 @@
 // GET /api/users
 // POST /api/courses/:courseId/reviews
 
+var auth = require('basic-auth');
+var User = require('../models/user');
+
 function requiresLogin (req, res, next) {
-    // if (req.session && req.session.userId) {
-        console.log('User logged in - CHECK');
-        return next();
-    // } else {
-    //     var err = new Error('You must be logged in to view this, dog.');
-    //     err.status = 401;
-    //     return next(err);
-    // }
+    var user = auth(req); //.name, .pass
+    
+    if (user) {
+        console.log('noen prøver å logge på:', user);
+        
+        User.authenticate(user.name, user.pass, function (error, user) {
+            console.log('sjekker i databaaasen');
+            if (error || !user) {
+              var err = new Error('Wrong email or password');
+              console.log('NOPE');
+              err.status = 401;
+              return next(err);
+            } else { // riktig brukernavn og passord
+                req.user = user; 
+                console.log('YES:', req.user.name);
+                return next();
+            }
+        });
+
+    } else {
+        var err = new Error('You must be logged in to view this, dog.');
+        err.status = 401;
+        return next(err);
+    }
 }
 
 module.exports.requiresLogin = requiresLogin;

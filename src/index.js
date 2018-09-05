@@ -2,6 +2,8 @@
 
 // load modules
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
@@ -32,9 +34,15 @@ app.set('port', process.env.PORT || 5000);
 // morgan gives us http request logging
 app.use(morgan('dev'));
 
+// parse incoming requests
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 // routes
 app.use('/api/courses', coursesRouter);
 app.use('/api/users', usersRouter);
+
+
 
 // Update any POST and PUT routes to return Mongoose validation errors.
 // Use the next function in each route to pass any Mongoose validation errors to Express’s global error handler
