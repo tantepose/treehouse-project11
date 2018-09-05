@@ -20,19 +20,19 @@ function requiresLogin (req, res, next) {
     if (user) {
         console.log('noen prøver å logge på:', user);
         
-        User.authenticate(user.name, user.pass, function (error, user) {
-            console.log('sjekker i databaaasen');
-            if (error || !user) {
-              var err = new Error('Wrong email or password');
-              console.log('NOPE');
-              err.status = 401;
-              return next(err);
-            } else { // riktig brukernavn og passord
+        // User.authenticate(user.name, user.pass, function (error, user) {
+        //     console.log('sjekker i databaaasen');
+        //     if (error || !user) {
+        //       var err = new Error('Wrong email or password');
+        //       console.log('NOPE');
+        //       err.status = 401;
+        //       return next(err);
+        //     } else { // riktig brukernavn og passord
+                // console.log('YES:', req.user.name);
                 req.user = user; 
-                console.log('YES:', req.user.name);
                 return next();
-            }
-        });
+        //     }
+        // });
 
     } else {
         var err = new Error('You must be logged in to view this, dog.');

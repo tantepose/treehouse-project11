@@ -7,7 +7,7 @@ var User = require('../models/user');
 // GET /api/users 200
 // Returns the currently authenticated user
 router.get('/', requiresLogin, function (req, res, next) {
-    User.find({})
+    User.find({emailAddress: req.user.name})
       .exec(function (err, user) { //eksevere når klar
           if (err) return next(err); // sende til express error if error
           res.json(user); // responder med alle questions som json
