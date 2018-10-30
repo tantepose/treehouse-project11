@@ -31,20 +31,10 @@ router.post('/', function (req, res, next) {
         if (error) {
             return next(error);
         } else {
-            res.location('/'); 
+            res.location('/').status(201).end();
             return next();
         }
     });
 });
-
-// TEST: GET /api/users
-// return all users
-// router.get('/', function (req, res, next) {
-//     User.find({})
-//       .exec(function (err, user) { //eksevere når klar
-//           if (err) return next(err); // sende til express error if error
-//           res.json(user); // responder med alle questions som json
-//     });
-// });
 
 module.exports = router;

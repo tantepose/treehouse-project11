@@ -28,9 +28,7 @@ router.get('/:courseId', function (req, res, next) {
 
 // POST /api/courses 201
 // Creates a course, sets the Location header, and returns no content
-
 /* 
-
 {
     "title": "New Course",
     "description": "My course description",
@@ -44,9 +42,7 @@ router.get('/:courseId', function (req, res, next) {
         }
     ]
 }
-
 */
-
 router.post('/', function (req, res, next) {
     console.log('Creating course:', req.body);
 
@@ -67,7 +63,7 @@ router.post('/', function (req, res, next) {
         if (error) {
             return next(error);
         } else {
-            res.location('/'); 
+            res.location('/').status(201).end();
             return next();
         }
     });
@@ -77,12 +73,18 @@ router.post('/', function (req, res, next) {
 // Updates a course and returns no content
 router.put('/:courseID', function (req, res, next) {
     console.log('updating course:', req.params.courseId);
+
+    res.location('/').status(204).end();
+    return next();
 });
 
 // POST /api/courses/:courseId/reviews 201
 // Creates a review for the specified course ID, sets the Location header to the related course, and returns no content
 router.post('/:courseId/reviews', function (req, res, next) {
-    console.log('creating review');    
+    console.log('creating review');
+    
+    res.location('/api/courses/' + req.params.courseId).status(201).end();
+    return next();
 });
 
 
