@@ -36,7 +36,7 @@ function requiresLogin (req, res, next) {
         // });
 
     } else {
-        var err = new Error('You must be logged in to view this, dog.');
+        var err = new Error('Sorry, you must be logged in to view this!');
         err.status = 401;
         return next(err);
     }

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
+var requiresLogin = require('../middleware/login').requiresLogin;
 var Course = require('../models/course');
 
 // GET /api/courses 200 
@@ -28,22 +29,7 @@ router.get('/:courseId', function (req, res, next) {
 
 // POST /api/courses 201
 // Creates a course, sets the Location header, and returns no content
-/* 
-{
-    "title": "New Course",
-    "description": "My course description",
-    "user": {
-        "_id": "57029ed4795118be119cc437"
-    },
-    "steps": [
-        {
-            "title": "Step 1",
-            "description": "My first step."
-        }
-    ]
-}
-*/
-router.post('/', function (req, res, next) {
+router.post('/', requiresLogin, function (req, res, next) {
     console.log('Creating course:', req.body);
 
     // create user object
@@ -71,7 +57,7 @@ router.post('/', function (req, res, next) {
 
 // PUT /api/courses/:courseId 204
 // Updates a course and returns no content
-router.put('/:courseID', function (req, res, next) {
+router.put('/:courseID', requiresLogin, function (req, res, next) {
     console.log('updating course:', req.params.courseId);
 
     res.location('/').status(204).end();
@@ -80,7 +66,7 @@ router.put('/:courseID', function (req, res, next) {
 
 // POST /api/courses/:courseId/reviews 201
 // Creates a review for the specified course ID, sets the Location header to the related course, and returns no content
-router.post('/:courseId/reviews', function (req, res, next) {
+router.post('/:courseId/reviews', requiresLogin, function (req, res, next) {
     console.log('creating review');
     
     res.location('/api/courses/' + req.params.courseId).status(201).end();
