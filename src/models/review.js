@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 
+// mongoose model for Review
 var ReviewSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId // _id from the users collection

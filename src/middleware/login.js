@@ -1,41 +1,29 @@
-// Set up permissions to require users to be signed in
-// Postman will set an Authorization header with each request when a user is signed in.
-// Add a middleware function that attempts to get the user credentials from Authorization header set on the request.
-// You can use the basic-auth npm package to parse the `Authorization' header into the user's credentials.
-// Use the authenticate static method you built on the user schema to check the credentials against the database
-// If the authenticate method returns the user, then set the user document on the request so that each following middleware function has access to it.
-// If the authenticate method returns an error, then pass it to the next function
-
-// Use this middleware in the following routes:
-// POST /api/courses
-// PUT /api/courses/:courseId
-// GET /api/users
-// POST /api/courses/:courseId/reviews
-
 var auth = require('basic-auth');
 var User = require('../models/user');
 
+// middleware attached to routes requiring a logged in user
 function requiresLogin (req, res, next) {
-    var user = auth(req); //.name, .pass
-    
+    // get user credentials from authorization header set on the request, using bacic-auth
+    var user = auth(req); 
+
+    // authorization header present
     if (user) {
-        console.log('noen prøver å logge på:', user);
-        
-        // User.authenticate(user.name, user.pass, function (error, user) {
-        //     console.log('sjekker i databaaasen');
-        //     if (error || !user) {
-        //       var err = new Error('Wrong email or password');
-        //       console.log('NOPE');
-        //       err.status = 401;
-        //       return next(err);
-        //     } else { // riktig brukernavn og passord
-                // console.log('YES:', req.user.name);
+        // using the authenticate static method on the user schema to check the credentials against the database
+        User.authenticate(user.name, user.pass, function (error, user) {
+            // authenticate method returns an error (user not found or wrong password)
+            if (error || !user) {
+                var err = new Error('Wrong email or password!');
+                err.status = 401;
+                return next(err);
+            } 
+            // no errors, user authenticated
+            else { 
+                // set the user document on the request so that each following middleware function has access to it
                 req.user = user; 
                 return next();
-        //     }
-        // });
-
-    } else {
+            }
+        });
+    } else { // no authorization header present
         var err = new Error('Sorry, you must be logged in to view this!');
         err.status = 401;
         return next(err);

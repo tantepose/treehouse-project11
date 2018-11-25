@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
-var ReviewSchema = require('./review');
-
+// mongoose model for Course
 var CourseSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.Types.ObjectId // _id from the users collection
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User' // _id from the users collection
     },
     title: {
         type: String,
@@ -33,8 +33,9 @@ var CourseSchema = new mongoose.Schema({
             }
         }
     ],
-    reviews: [{ 
-        type: mongoose.Schema.Types.ObjectId // _id values from the reviews collection
+    reviews: [{ // _id values from the reviews collection
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review',
     }]
 });
 
